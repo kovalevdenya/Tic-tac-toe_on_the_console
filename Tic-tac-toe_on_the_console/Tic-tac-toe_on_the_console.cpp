@@ -45,7 +45,7 @@ void RandomChoiceAndFirstDrawing(std::string& xPlayer, std::string& oPlayer, con
 	DrowingField(field, xPlayer, oPlayer);
 } // выбор фигуры для игроков и прорисовка поля
 
-void createX(std::vector<std::vector<std::string>>& field, int& X) {
+void createX(std::vector<std::vector<std::string>>& field, int& X) { // Создание крестика на поле
 	switch (X) {
 	case 1:
 		field[0][0] = " X ";
@@ -77,7 +77,7 @@ void createX(std::vector<std::vector<std::string>>& field, int& X) {
 	}
 }
 
-void createO(std::vector<std::vector<std::string>>& field, int& O) {
+void createO(std::vector<std::vector<std::string>>& field, int& O) { // Создание нолика на поле
 	switch (O) {
 	case 1:
 		field[0][0] = " O ";
@@ -106,6 +106,44 @@ void createO(std::vector<std::vector<std::string>>& field, int& O) {
 	case 9:
 		field[4][4] = " O ";
 		break;
+	}
+}
+
+bool CheckingTheEnd(std::vector<std::vector<std::string>> field, bool& tie) { // Проверка на окончание игры
+	if (field[0][0] == field[0][2] && field[0][2] == field[0][4]) {
+		return true;
+	}
+	else if (field[2][0] == field[2][2] && field[2][2] == field[2][4]) {
+		return true;
+	}
+	else if (field[4][0] == field[4][2] && field[4][2] == field[4][4]) {
+		return true;
+	}
+	else if (field[0][0] == field[2][0] && field[2][0] == field[4][0]) {
+		return true;
+	}
+	else if (field[0][2] == field[2][2] && field[2][2] == field[4][2]) {
+		return true;
+	}
+	else if (field[4][0] == field[4][2] && field[4][2] == field[4][4]) {
+		return true;
+	}
+	else if (field[0][0] == field[2][2] && field[2][2] == field[4][4]) {
+		return true;
+	}
+	else if (field[0][4] == field[2][2] && field[2][2] == field[4][0]) {
+		return true;
+	}
+	else {
+		for (auto place : field) {
+			for (auto ch : place) {
+				if (ch == " 1 " || ch == " 2 " || ch == " 3 " || ch == " 4 " || ch == " 5 " || ch == " 6 " || ch == " 7 " || ch == " 8 " || ch == " 9 ") {
+					return false;
+				}
+			}
+		}
+		tie = true;
+		return false;
 	}
 }
 
@@ -138,13 +176,34 @@ int main() {
 				std::cin >> X;
 				createX(thisField, X);
 				DrowingField(thisField, xPlayer, oPlayer);
-				// здесь нужна проверка на выйгрыш
+				winX = CheckingTheEnd(thisField,tie);
+				if (winX) {
+					std::cout << std::endl << "Выйграли крестики!!!" << std::endl << "Нажмите Enter для продолжения...";
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cin.get();
+					system("cls");
+					break;
+				}
+				if (tie) {
+					std::cout << std::endl << "Дружеская ничья!!!" << std::endl << "Нажмите Enter для продолжения...";
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cin.get();
+					system("cls");
+					break;
+				}
 				std::cout << std::endl << "Нолики ваш ход, выберите поле:";
 				int O;
 				std::cin >> O;
 				createO(thisField, O);
 				DrowingField(thisField, xPlayer, oPlayer);
-				// здесь тоже проверка
+				winO = CheckingTheEnd(thisField,tie);
+				if (winO) {
+					std::cout << std::endl << "Выйграли нолики!!!" << std::endl << "Нажмите Enter для продолжения...";
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cin.get();
+					system("cls");
+					break;
+				}
 			}
 
 		}
