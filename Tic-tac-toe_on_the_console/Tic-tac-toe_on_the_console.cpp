@@ -1,6 +1,7 @@
 ﻿#include<iostream>
 #include<string>
 #include<vector>
+#include <windows.h>
 #include <cstdlib> // Для библиотеки случайных чисел
 #include <ctime>   // Для инициализации генератора случайных чисел
 
@@ -15,17 +16,35 @@ void Menu() {
 
 void DrowingField(std::vector<std::vector<std::string>> orig, std::string& Player1,std::string& Player2) { // Рисовка поля
 	system("cls");
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	for (size_t i = 0; i != orig.size(); ++i) {
 		for (size_t j = 0; j != orig[i].size(); ++j) {
-			
+			if (orig[i][j] == " X ") {
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
 				std::cout << orig[i][j];
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+			}
+			else if (orig[i][j] == " O ") {
+				SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+				std::cout << orig[i][j];
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+			}
+			else {
+				std::cout << orig[i][j];
+			}
 			
 		}
 		if (i == 0) {
-			std::cout << "\t\t\t\tX - " << Player1;
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+			std::cout << "\t\t\t\tX";
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+			std::cout << " - " << Player1;
 		}
 		else if (i == 1) {
-			std::cout << "\t\t\t\tO - " << Player2;
+			SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+			std::cout << "\t\t\t\tO";
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+			std::cout << " - " << Player2;
 		}
 		std::cout << std::endl;
 	}
@@ -164,7 +183,7 @@ int main() {
 			bool tie = false, winX = false, winO = false;
 			std::string Player1, Player2;
 			std::cout << "Введите имя Игрока №1" << std::endl;
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 			std::getline(std::cin, Player1);
 			std::cout << "Введите имя Игрока №2" << std::endl;
 			std::getline(std::cin, Player2);
@@ -179,14 +198,14 @@ int main() {
 				winX = CheckingTheEnd(thisField,tie);
 				if (winX) {
 					std::cout << std::endl << "Выйграли крестики!!!" << std::endl << "Нажмите Enter для продолжения...";
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 					std::cin.get();
 					system("cls");
 					break;
 				}
 				if (tie) {
 					std::cout << std::endl << "Дружеская ничья!!!" << std::endl << "Нажмите Enter для продолжения...";
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 					std::cin.get();
 					system("cls");
 					break;
@@ -199,7 +218,7 @@ int main() {
 				winO = CheckingTheEnd(thisField,tie);
 				if (winO) {
 					std::cout << std::endl << "Выйграли нолики!!!" << std::endl << "Нажмите Enter для продолжения...";
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 					std::cin.get();
 					system("cls");
 					break;
