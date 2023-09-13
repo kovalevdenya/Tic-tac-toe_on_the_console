@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <cstdlib> // Для библиотеки случайных чисел
 #include <ctime>   // Для инициализации генератора случайных чисел
+#include <conio.h>
 
 void Menu() {  
 	std::cout << "\t\t\t\t\t\t" << "Tic-Tac" << std::endl;
@@ -65,67 +66,67 @@ void RandomChoiceAndFirstDrawing(std::string& xPlayer, std::string& oPlayer, con
 } // выбор фигуры для игроков и прорисовка поля
 
 void createX(std::vector<std::vector<std::string>>& field, int& X) { // Создание крестика на поле
-	switch (X) {
-	case 1:
-		field[0][0] = " X ";
-		break;
-	case 2:
-		field[0][2] = " X ";
-		break;
-	case 3:
-		field[0][4] = " X ";
-		break;
-	case 4:
-		field[2][0] = " X ";
-		break;
-	case 5:
-		field[2][2] = " X ";
-		break;
-	case 6:
-		field[2][4] = " X ";
-		break;
-	case 7:
-		field[4][0] = " X ";
-		break;
-	case 8:
-		field[4][2] = " X ";
-		break;
-	case 9:
-		field[4][4] = " X ";
-		break;
-	}
+		switch (X) {
+		case 1:
+			field[0][0] = " X ";
+			break;
+		case 2:
+			field[0][2] = " X ";
+			break;
+		case 3:
+			field[0][4] = " X ";
+			break;
+		case 4:
+			field[2][0] = " X ";
+			break;
+		case 5:
+			field[2][2] = " X ";
+			break;
+		case 6:
+			field[2][4] = " X ";
+			break;
+		case 7:
+			field[4][0] = " X ";
+			break;
+		case 8:
+			field[4][2] = " X ";
+			break;
+		case 9:
+			field[4][4] = " X ";
+			break;
+		}
 }
 
 void createO(std::vector<std::vector<std::string>>& field, int& O) { // Создание нолика на поле
-	switch (O) {
-	case 1:
-		field[0][0] = " O ";
-		break;
-	case 2:
-		field[0][2] = " O ";
-		break;
-	case 3:
-		field[0][4] = " O ";
-		break;
-	case 4:
-		field[2][0] = " O ";
-		break;
-	case 5:
-		field[2][2] = " O ";
-		break;
-	case 6:
-		field[2][4] = " O ";
-		break;
-	case 7:
-		field[4][0] = " O ";
-		break;
-	case 8:
-		field[4][2] = " O ";
-		break;
-	case 9:
-		field[4][4] = " O ";
-		break;
-	}
+		switch (O) {
+		case 1:
+			field[0][0] = " O ";
+			break;
+		case 2:
+			field[0][2] = " O ";
+			break;
+		case 3:
+			field[0][4] = " O ";
+			break;
+		case 4:
+			field[2][0] = " O ";
+			break;
+		case 5:
+			field[2][2] = " O ";
+			break;
+		case 6:
+			field[2][4] = " O ";
+			break;
+		case 7:
+			field[4][0] = " O ";
+			break;
+		case 8:
+			field[4][2] = " O ";
+			break;
+		case 9:
+			field[4][4] = " O ";
+			break;
+		}
 }
 
 bool CheckingTheEnd(std::vector<std::vector<std::string>> field, bool& tie) { // Проверка на окончание игры
@@ -166,6 +167,55 @@ bool CheckingTheEnd(std::vector<std::vector<std::string>> field, bool& tie) { //
 	}
 }
 
+void Game(std::string& xPlayer,std::string& oPlayer, const std::string& Player1, const std::string& Player2, std::vector<std::vector<std::string>>& field) {
+	std::vector<std::vector<std::string>> thisField = field;
+	bool tie = false, winX = false, winO = false;
+	RandomChoiceAndFirstDrawing(xPlayer, oPlayer, Player1, Player2, thisField);
+	while (!(tie || winX || winO)) {
+		std::cout << std::endl << "Крестики ваш ход, выберите поле:";
+		bool checkInCorrect = true;
+		int X;
+		while (checkInCorrect) {
+			std::cin >> X;
+			if (X >= 1 && X <= 9) {
+				break;
+			}
+			else {
+				std::cout << "Не корректное значение, введите значение от 1 до 9: ";
+			}
+		}
+		createX(thisField, X);
+		DrowingField(thisField, xPlayer, oPlayer);
+		winX = CheckingTheEnd(thisField, tie);
+		if (winX) {
+			std::cout << std::endl << "Выйграли крестики!!!" << std::endl;
+			break;
+		}
+		if (tie) {
+			std::cout << std::endl << "Дружеская ничья!!!" << std::endl;
+			break;
+		}
+		std::cout << std::endl << "Нолики ваш ход, выберите поле:";
+		int O;
+		while (checkInCorrect) {
+			std::cin >> O;
+			if (O >= 1 && O <= 9) {
+				break;
+			}
+			else {
+				std::cout << "Не корректное значение, введите значение от 1 до 9: ";
+			}
+		}
+		createO(thisField, O);
+		DrowingField(thisField, xPlayer, oPlayer);
+		winO = CheckingTheEnd(thisField, tie);
+		if (winO) {
+			std::cout << std::endl << "Выйграли нолики!!!" << std::endl;
+			break;
+		}
+	}
+}
+
 int main() {
 	setlocale(LC_ALL, "Ru");
 	std::vector<std::vector<std::string>> field = { {" 1 ","|"," 2 ","|"," 3 "},{"-----------"},{" 4 ","|"," 5 ","|"," 6 "},{"-----------"},{" 7 ","|"," 8 ","|"," 9 "}};
@@ -179,8 +229,6 @@ int main() {
 			std::cin >> numMenu;
 		}
 		if (numMenu == "1") {
-			std::vector<std::vector<std::string>> thisField = field;
-			bool tie = false, winX = false, winO = false;
 			std::string Player1, Player2;
 			std::cout << "Введите имя Игрока №1" << std::endl;
 			std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
@@ -188,40 +236,23 @@ int main() {
 			std::cout << "Введите имя Игрока №2" << std::endl;
 			std::getline(std::cin, Player2);
 			std::string xPlayer, oPlayer;
-			RandomChoiceAndFirstDrawing(xPlayer, oPlayer, Player1, Player2, thisField);
-			while (!(tie || winX || winO)) {
-				std::cout << std::endl << "Крестики ваш ход, выберите поле:";
-				int X;
-				std::cin >> X;
-				createX(thisField, X);
-				DrowingField(thisField, xPlayer, oPlayer);
-				winX = CheckingTheEnd(thisField,tie);
-				if (winX) {
-					std::cout << std::endl << "Выйграли крестики!!!" << std::endl << "Нажмите Enter для продолжения...";
-					std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-					std::cin.get();
-					system("cls");
-					break;
-				}
-				if (tie) {
-					std::cout << std::endl << "Дружеская ничья!!!" << std::endl << "Нажмите Enter для продолжения...";
-					std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-					std::cin.get();
-					system("cls");
-					break;
-				}
-				std::cout << std::endl << "Нолики ваш ход, выберите поле:";
-				int O;
-				std::cin >> O;
-				createO(thisField, O);
-				DrowingField(thisField, xPlayer, oPlayer);
-				winO = CheckingTheEnd(thisField,tie);
-				if (winO) {
-					std::cout << std::endl << "Выйграли нолики!!!" << std::endl << "Нажмите Enter для продолжения...";
-					std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-					std::cin.get();
-					system("cls");
-					break;
+			bool repeat = true;
+			while (repeat) {
+				Game(xPlayer, oPlayer, Player1, Player2, field);
+				std::cout << "Если хотите ссыграть еще раз нажмите 'Enter', для окончания игры нажмите 'ESC'";
+				while (1) {
+					char ch;
+					if (_kbhit()) {  // Проверка наличия нажатой клавиши
+						ch = _getch();  // Получение нажатой клавиши
+						if (ch == 27) {  // Код клавиши ESC
+							repeat = false;
+							system("cls");
+							break;
+						}
+						else if(ch == 13){
+							break;
+						}
+					}
 				}
 			}
 
