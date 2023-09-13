@@ -218,6 +218,8 @@ void Game(std::string& xPlayer,std::string& oPlayer, const std::string& Player1,
 
 int main() {
 	setlocale(LC_ALL, "Ru");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	std::vector<std::vector<std::string>> field = { {" 1 ","|"," 2 ","|"," 3 "},{"-----------"},{" 4 ","|"," 5 ","|"," 6 "},{"-----------"},{" 7 ","|"," 8 ","|"," 9 "}};
 	
 	while (true) {
